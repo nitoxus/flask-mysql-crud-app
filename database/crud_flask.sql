@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `phone_book` (
 --
 
 INSERT INTO `phone_book` (`id`, `name`, `phone`, `address`) VALUES
-(16, 'Muhammad Hanif', '085733492411', 'Lamongan');
+(16, 'Toly Sukhotin', '+972525356777', 'Israel');
 
 --
 -- Indexes for dumped tables
