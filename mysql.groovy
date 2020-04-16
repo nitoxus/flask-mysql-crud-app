@@ -1,5 +1,5 @@
 def mysql_image = "mysql:latest"
-def mysql_remote_host = "10.0.2.31"
+def mysql_remote_host = "mysql.service.consul"
 def db_user = "app"
 def db_user_pass = "admin"
 def db_name = "crud_flask"
