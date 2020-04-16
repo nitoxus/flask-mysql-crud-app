@@ -27,7 +27,7 @@ pipeline
             }
             steps
             {
-                sh "mysql -h ${ mysql_remote_host } -u${db_user} -p${db_user_pass} -e 'show databases;'"
+                sh "mysql -h ${ mysql_remote_host } -u${db_user} -p${db_user_pass} ${db_name} < database/${db_name}.sql"
             }
         }
     }
