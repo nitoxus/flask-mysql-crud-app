@@ -70,7 +70,10 @@ pipeline {
                 }
                 timeout(time: 5, unit: 'MINUTES')
                 {                    
-                    sh "curl -sf -o /dev/null http://${ELB}"
+                    retry(5)
+                    {
+                        sh "curl -sf -o /dev/null http://${ELB}"
+                    }
                 }
             }
         }
