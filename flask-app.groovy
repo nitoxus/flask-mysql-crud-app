@@ -66,7 +66,7 @@ pipeline {
                 script
                 {
                     sh("kubectl apply -f ${ deployment }")
-                    dns_name = sh(returnStdout: true, script:"kubectl get svc flask-crud-app -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'")
+                    dns_name = sh(returnStdout: true, script:"kubectl get svc flask-crud-app -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'").trim()
                 }
                 timeout(time: 3, unit: 'MINUTES')
                 {
