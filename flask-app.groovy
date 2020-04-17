@@ -45,5 +45,17 @@ pipeline {
                 }
             }
         }
+        stage("Push the image to DockerHub") 
+        { 
+            steps 
+            {
+                script 
+                {
+                    withDockerRegistry(credentialsId: 'dockerhub', url: ''){
+                        docker_image.push()
+                    }
+                }
+            }
+        }
     }
 }
