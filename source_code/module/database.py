@@ -17,7 +17,6 @@ class Database:
         return pymysql.connect(db_host, db_username, db_password, db_name)
 
     def read(self, id):
-        print("db_host  %s db_username %s db_password %s db_name %s" % (db_host, db_username,db_password,db_name))
         con = Database.connect(self)
         cursor = con.cursor()
         
