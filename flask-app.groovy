@@ -66,10 +66,10 @@ pipeline {
                 script
                 {
                     sh("kubectl apply -f ${ deployment }")
+                    ELB = sh(returnStdout: true, script:"kubectl get svc flask-crud-app -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'")
                 }
                 timeout(time: 5, unit: MINUTES)
-                {
-                    ELB = sh(returnStdout: true, script:"kubectl get svc flask-crud-app -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'")
+                {                    
                     sh "curl -sf -o /dev/null http://${ELB}"
                 }
             }
