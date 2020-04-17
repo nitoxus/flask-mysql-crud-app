@@ -2,17 +2,18 @@ def docker_registry = "sukhotin/flask-crud-app"
 def docker_registry_creds = "dockerhub"
 def docker_image = ""
 def app_port = "8181"
-def mysql_service_name = "mysql.service.consul"
+def mysql_service_name = "mysql.service.opsschool-project.consul"
 def db_host = ""
 def db_username = "app"
 def db_password = "admin"
 def db_name = "crud_flask"
 def with_run_params = ""
+def deployment = "deploy-flask-crud-app.yml"
 pipeline {
     agent any 
     stages 
     {
-        stage('Get MySql Server IP')
+        stage("Get MySql Server IP")
         {
             steps 
             {
@@ -54,6 +55,21 @@ pipeline {
                     withDockerRegistry(credentialsId: 'dockerhub', url: ''){
                         docker_image.push()
                     }
+                }
+            }
+        }
+        stage("Deploy app to k8s")
+        {
+            steps
+            {
+                script
+                {
+                    sh("kubectl apply -f ${ deployment }")
+                }
+                timeout(time: 5, unit: MINUTES)
+                {
+                    ELB = sh("kubectl get svc flask-crud-app -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'")
+                    sh "curl -sf -o /dev/null http://${ELB}"
                 }
             }
         }
