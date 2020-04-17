@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-crud-app
+  labels:
+    app: flask-crud-app
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8181
+  selector:
+    app: flask-crud-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-crud-app
+  labels:
+    app: flask-crud-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flask-crud-app
+  template:
+    metadata:
+      labels:
+        app: flask-crud-app
+    spec:
+      containers:
+      - name: flask-crud-app
+        image: sukhotin/flask-crud-app
+        ports:
+        - containerPort: 8181
+        env:
+          - name: db_host
+            valueFrom:
+              configMapKeyRef:
+                name: flask-crud-app
+                key: db_host
+          - name: db_name
+            valueFrom:
+              configMapKeyRef:
+                name: flask-crud-app
+                key: db_name
+          - name: db_username
+            valueFrom:
+              secretKeyRef:
+                name: flask-crud-app
+                key: db_username
+          - name: db_password
+            valueFrom:
+              secretKeyRef:
+                name: flask-crud-app
+                key: db_password

@@ -11,7 +11,7 @@ db_host = os.environ['db_host']
 db_username = os.environ['db_username']
 db_password = os.environ['db_password']
 db_name = os.environ['db_name']
-
+print(db_host,db_username,db_password,db_name)
 class Database:
     def connect(self):
         return pymysql.connect(db_host, db_username, db_password, db_name)
