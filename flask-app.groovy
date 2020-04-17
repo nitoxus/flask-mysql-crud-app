@@ -26,7 +26,7 @@ pipeline {
                 script 
                 {
                     docker.image(docker_registry).withRun(with_run_params) {c ->
-                        sh "curl -sSf http://localhost:${app_port}"
+                        sh "curl -sS http://localhost:${app_port}"
                         sh "docker logs ${c.id}"
                     }
                 }
