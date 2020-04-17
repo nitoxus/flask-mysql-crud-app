@@ -19,7 +19,7 @@ metadata:
   labels:
     app: flask-crud-app
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: flask-crud-app
@@ -33,6 +33,12 @@ spec:
         image: sukhotin/flask-crud-app
         ports:
         - containerPort: 8181
+        livenessProbe:
+          httpGet:
+           path: /
+           port: 8181
+          initialDelaySeconds: 5
+          periodSeconds: 5
         env:
           - name: db_host
             valueFrom:
