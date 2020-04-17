@@ -15,11 +15,11 @@ db_name = os.environ['db_name']
 class Database:
     def connect(self): 
         try:
-            conn = pymysql.connect(db_host, db_username, db_password, db_name)
+            self.conn = pymysql.connect(db_host, db_username, db_password, db_name)
         except Exception as e:
-            print(e)
-            print("db_host  %s db_username %s db_password %s db_name %s" % (db_host, db_username,db_password,db_name))   
-        return conn
+            print("db_host  %s db_username %s db_password %s db_name %s" % (db_host, db_username,db_password,db_name)) 
+            print(e)              
+        return self.conn
 
     def read(self, id):
         con = Database.connect(self)
