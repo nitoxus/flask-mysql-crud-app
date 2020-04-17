@@ -39,7 +39,7 @@ pipeline {
                 {
                     with_run_params = "-e db_host=${mysql_remote_ip} -e db_username=${db_username} -e db_password=${db_password} -e db_name=${db_name} -p ${app_port}:${app_port}"
                     docker.image(docker_registry).withRun(with_run_params) {c ->
-                        sh "curl -sS http://localhost:${app_port}"
+                        sh "curl -sf http://localhost:${app_port} > /dev/null"
                     }
                 }
             }
