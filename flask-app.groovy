@@ -9,7 +9,7 @@ def db_password = "admin"
 def db_name = "crud_flask"
 def with_run_params = ""
 def deployment = "deploy-flask-crud-app.yml"
-def ELB = ""
+def dns_name = ""
 pipeline {
     agent any 
     stages 
@@ -66,11 +66,11 @@ pipeline {
                 script
                 {
                     sh("kubectl apply -f ${ deployment }")
-                    ELB = sh(returnStdout: true, script:"kubectl get svc flask-crud-app -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'")
+                    dns_name = sh(returnStdout: true, script:"kubectl get svc flask-crud-app -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'")
                 }
                 timeout(time: 3, unit: 'MINUTES')
                 {
-                    sh "until \$(curl -o /dev/null --head --fail http://${ELB}); do printf 'Wait for ${ELB}...'; sleep 20; done"
+                    sh "until \$(curl -o /dev/null --head --fail http://${ dns_name }); do printf 'Wait for ${ dns_name }...'; sleep 20; done"
                 }
             }
         }
