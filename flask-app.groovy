@@ -68,9 +68,9 @@ pipeline {
                     sh("kubectl apply -f ${ deployment }")
                     dns_name = sh(returnStdout: true, script:"kubectl get svc flask-crud-app -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'").trim()
                 }
-                timeout(time: 3, unit: 'MINUTES')
+                timeout(time: 2, unit: 'MINUTES')
                 {
-                    sh "until \$(curl -o /dev/null --head --fail http://${ dns_name }); do printf 'Wait for ${ dns_name }...'; sleep 20; done"
+                    sh "until \$(curl -s -o /dev/null --head --fail http://${ dns_name }); do printf 'Wait for ${ dns_name }...'; sleep 20; done"
                 }
             }
         }
