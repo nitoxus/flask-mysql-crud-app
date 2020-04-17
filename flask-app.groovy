@@ -9,6 +9,7 @@ def db_password = "admin"
 def db_name = "crud_flask"
 def with_run_params = ""
 def deployment = "deploy-flask-crud-app.yml"
+def ELB = ""
 pipeline {
     agent any 
     stages 
@@ -60,7 +61,6 @@ pipeline {
         }
         stage("Deploy app to k8s")
         {
-            def ELB = ""
             steps
             {
                 script
@@ -69,7 +69,7 @@ pipeline {
                 }
                 timeout(time: 5, unit: MINUTES)
                 {
-                    ELB = sh("kubectl get svc flask-crud-app -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'")
+                    ELB = sh(returnStdout: true, script:"kubectl get svc flask-crud-app -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'")
                     sh "curl -sf -o /dev/null http://${ELB}"
                 }
             }
