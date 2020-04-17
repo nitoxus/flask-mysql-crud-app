@@ -6,7 +6,6 @@ Created on Jan 10, 2017
 
 import pymysql
 import os
-import logging
 
 db_host = os.environ['db_host']
 db_username = os.environ['db_username']
@@ -18,9 +17,10 @@ class Database:
         return pymysql.connect(db_host, db_username, db_password, db_name)
 
     def read(self, id):
+        print("db_host  %s db_username %s db_password %s db_name %s" % (db_host, db_username,db_password,db_name))
         con = Database.connect(self)
         cursor = con.cursor()
-
+        
         try:
             if id == None:
                 cursor.execute("SELECT * FROM phone_book order by name asc")
@@ -28,8 +28,7 @@ class Database:
                 cursor.execute("SELECT * FROM phone_book where id = %s order by name asc", (id,))
 
             return cursor.fetchall()
-        except:
-            logging.error("db_host  %s db_username %s db_password %s db_name %s" % (db_host, db_username,db_password,db_name))          
+        except:          
             return ()
         finally:
             con.close()
