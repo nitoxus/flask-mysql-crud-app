@@ -1,5 +1,5 @@
 def mysql_image = "mysql:latest"
-def mysql_remote_host = "mysql.service.consul"
+def mysql_service_name = "mysql.service.consul"
 def mysql_remote_ip = ""
 def db_user = "app"
 def db_user_pass = "admin"
@@ -13,7 +13,7 @@ pipeline
         {
             steps 
             {
-               mysql_remote_ip = sh(returnStdout: true, script: "dig +short ${ mysql_remote_host }").trim()
+               mysql_remote_ip = sh(returnStdout: true, script: "dig +short ${ mysql_service_name }").trim()
             }
         }
         stage('Create new database') 
