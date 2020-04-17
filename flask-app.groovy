@@ -21,7 +21,7 @@ pipeline {
                 script 
                 {
                     docker.image(docker_registry).withRun("-p ${app_port}:${app_port}") {c ->
-                        sh "until \$(curl --output /dev/null --head --fail http://localhost:${app_port}); do printf 'Wait for responce...'; sleep 5; done"
+                        sh "until \$(curl -sSf http://localhost:${app_port}); do printf 'Wait for responce...'; sleep 5; done"
                     }
                 }
             }
