@@ -13,7 +13,10 @@ pipeline
         {
             steps 
             {
-               mysql_remote_ip = sh(returnStdout: true, script: "dig +short ${ mysql_service_name }").trim()
+               script
+               {
+                   mysql_remote_ip = sh(returnStdout: true, script: "dig +short ${ mysql_service_name }").trim()
+               }
             }
         }
         stage('Create new database') 

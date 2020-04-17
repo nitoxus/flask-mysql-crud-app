@@ -1,7 +1,9 @@
+def registry = "sukhotin/flask-crud-app"
+def registryCredential = "dockerhub"
 pipeline {
     environment {
-        registry = "sukhotin/project_flask_http"
-        registryCredential = "dockerhub"
+        
+        
         deployment = "project-flask.yml"
         dockerImage = ""
         get_dns_name_script = "aws elb describe-load-balancers --region us-east-1 --query 'LoadBalancerDescriptions[*].DNSName' --output text"      
