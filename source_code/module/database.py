@@ -6,6 +6,7 @@ Created on Jan 10, 2017
 
 import pymysql
 import os
+import logging
 
 db_host = os.environ['db_host']
 db_username = os.environ['db_username']
@@ -13,13 +14,8 @@ db_password = os.environ['db_password']
 db_name = os.environ['db_name']
 
 class Database:
-    def connect(self): 
-        try:
-            self.conn = pymysql.connect(db_host, db_username, db_password, db_name)
-        except Exception as e:
-            print("db_host  %s db_username %s db_password %s db_name %s" % (db_host, db_username,db_password,db_name)) 
-            print(e)              
-        return self.conn
+    def connect(self):
+        return pymysql.connect(db_host, db_username, db_password, db_name)
 
     def read(self, id):
         con = Database.connect(self)
@@ -33,6 +29,7 @@ class Database:
 
             return cursor.fetchall()
         except:
+            logging.error("db_host  %s db_username %s db_password %s db_name %s" % (db_host, db_username,db_password,db_name))          
             return ()
         finally:
             con.close()
