@@ -1,8 +1,8 @@
 def mysql_image = "mysql:latest"
 def mysql_service_name = "mysql.service.consul"
 def mysql_remote_ip = ""
-def db_user = "app"
-def db_user_pass = "admin"
+def db_username = "app"
+def db_password = "admin"
 def db_name = "crud_flask"
 
 pipeline 
@@ -27,7 +27,7 @@ pipeline
             }
             steps 
             {
-                sh "mysql -h ${ mysql_remote_ip } -u${db_user} -p${db_user_pass} -e 'create database ${db_name};'"
+                sh "mysql -h ${ mysql_remote_ip } -u${db_username} -p${db_password} -e 'create database ${db_name};'"
             }
         }
         stage('Import data to new database')
