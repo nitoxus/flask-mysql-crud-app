@@ -60,6 +60,7 @@ pipeline {
         }
         stage("Deploy app to k8s")
         {
+            def ELB = ""
             steps
             {
                 script
