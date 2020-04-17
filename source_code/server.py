@@ -7,7 +7,7 @@ Created on Jan 10, 2017
 from flask import Flask, flash, render_template, redirect, url_for, request, session
 from module.database import Database
 
-
+import os
 db_host = os.environ['db_host']
 db_username = os.environ['db_username']
 db_password = os.environ['db_password']
