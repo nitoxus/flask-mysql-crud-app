@@ -4,8 +4,8 @@ def docker_image = ""
 def mysql_remote_ip = ""
 def app_port = "8181"
 def mysql_service_name = "mysql.service.consul"
-def db_user = "app"
-def db_user_pass = "admin"
+def db_username = "app"
+def db_password = "admin"
 def db_name = "crud_flask"
 def with_run_params = ""
 pipeline {
@@ -37,10 +37,9 @@ pipeline {
             {
                 script 
                 {
-                    with_run_params = "-e db_host=${mysql_remote_ip} -e db_user=${db_user} -e db_user_pass=${db_user_pass} -e db_name=${db_name} -p ${app_port}:${app_port}"
+                    with_run_params = "-e db_host=${mysql_remote_ip} -e db_username=${db_username} -e db_password=${db_password} -e db_name=${db_name} -p ${app_port}:${app_port}"
                     docker.image(docker_registry).withRun(with_run_params) {c ->
                         sh "curl -sS http://localhost:${app_port}"
-                        sh "docker logs ${c.id}"
                     }
                 }
             }
