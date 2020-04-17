@@ -7,11 +7,6 @@ Created on Jan 10, 2017
 from flask import Flask, flash, render_template, redirect, url_for, request, session
 from module.database import Database
 
-import os
-db_host = os.environ['db_host']
-db_username = os.environ['db_username']
-db_password = os.environ['db_password']
-db_name = os.environ['db_name']
 
 app = Flask(__name__)
 app.secret_key = "mys3cr3tk3y"
@@ -20,7 +15,6 @@ db = Database()
 
 @app.route('/')
 def index():
-    print("db_host  %s db_username %s db_password %s db_name %s" % (db_host, db_username,db_password,db_name))
     data = db.read(None)
 
     return render_template('index.html', data=data)
