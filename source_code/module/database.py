@@ -13,11 +13,15 @@ db_password = os.environ['db_password']
 db_name = os.environ['db_name']
 
 class Database:
-    def connect(self):        
-        return pymysql.connect(db_host, db_username, db_password, db_name)
+    def connect(self): 
+        try:
+            conn = pymysql.connect(db_host, db_username, db_password, db_name)
+        except Exception as e:
+            print(e)
+            print("db_host  %s db_username %s db_password %s db_name %s" % (db_host, db_username,db_password,db_name))   
+        return conn
 
     def read(self, id):
-        print(db_host,db_username,db_password,db_name)
         con = Database.connect(self)
         cursor = con.cursor()
 
@@ -29,7 +33,6 @@ class Database:
 
             return cursor.fetchall()
         except:
-            print(db_host,db_username,db_password,db_name)
             return ()
         finally:
             con.close()
