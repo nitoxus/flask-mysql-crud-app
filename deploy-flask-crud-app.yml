@@ -43,6 +43,8 @@ spec:
           initialDelaySeconds: 5
           periodSeconds: 5
         env:
+          - name: FLASK_APP
+            value: flask-crud-app
           - name: db_host
             valueFrom:
               configMapKeyRef:
