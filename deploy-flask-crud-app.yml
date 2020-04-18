@@ -27,6 +27,9 @@ spec:
     metadata:
       labels:
         app: flask-crud-app
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '8181'
     spec:
       containers:
       - name: flask-crud-app

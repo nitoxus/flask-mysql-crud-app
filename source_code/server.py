@@ -6,12 +6,14 @@ Created on Jan 10, 2017
 
 from flask import Flask, flash, render_template, redirect, url_for, request, session
 from module.database import Database
-
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
 app.secret_key = "mys3cr3tk3y"
 db = Database()
 
+metrics = PrometheusMetrics(app)
+metrics.info('app_info', 'Application info', version='1.0.3')
 
 @app.route('/')
 def index():
@@ -100,4 +102,4 @@ def page_not_found(error):
 
 
 if __name__ == '__main__':
-    app.run(port=8181, host="0.0.0.0")
+    app.run(port=8181, host="0.0.0.0", debug=False)

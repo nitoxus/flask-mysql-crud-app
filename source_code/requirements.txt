@@ -1,2 +1,3 @@
 flask
 pymysql
+prometheus_flask_exporter
