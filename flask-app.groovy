@@ -1,6 +1,7 @@
 def docker_registry = "sukhotin/flask-crud-app"
 def docker_registry_creds = "dockerhub"
 def docker_image = ""
+def app_name = "flask-crud-app"
 def app_port = "8181"
 def mysql_service_name = "mysql.service.opsschool-project.consul"
 def db_host = ""
@@ -56,6 +57,17 @@ pipeline {
                     withDockerRegistry(credentialsId: 'dockerhub', url: ''){
                         docker_image.push()
                     }
+                }
+            }
+        }
+        stage("Create configmap and secrets for app") 
+        { 
+            steps 
+            {
+                script 
+                {
+                    sh "kubectl create configmap ${ app_name } --from-literal=db_host=${ mysql_service_name } --from-literal=db_name=${ db_name} "
+                    sh "kubectl create secret generic ${ app_name } --from-literal=db_username=${ db_username } --from-literal=db_password=${ db_password }"
                 }
             }
         }
