@@ -15,7 +15,7 @@ pipeline {
     agent any 
     stages 
     {
-        stage("Get MySql Server IP")
+        stage("Get MySql Server IP.")
         {
             steps 
             {
@@ -25,7 +25,7 @@ pipeline {
                }
             }
         }
-        stage("Build a docker image") {
+        stage("Build a docker image.") {
             steps 
             {
                 script 
@@ -34,7 +34,7 @@ pipeline {
                 }
             }            
         }
-        stage("Test the image") 
+        stage("Test the image.") 
         { 
             steps 
             {
@@ -48,7 +48,7 @@ pipeline {
                 }
             }
         }
-        stage("Push the image to DockerHub") 
+        stage("Push the image to DockerHub.") 
         { 
             steps 
             {
@@ -60,7 +60,7 @@ pipeline {
                 }
             }
         }
-        stage("Create configmap and secrets for app") 
+        stage("Create configmap for app.") 
         { 
             steps 
             {
@@ -69,13 +69,28 @@ pipeline {
                     
                     try
                     {
-                        sh "kubectl delete configmap ${ app_name }"
-                        sh "kubectl delete secret ${ app_name }"
+                        sh "kubectl get configmap ${ app_name }"
                     }
                     catch(exc)
                     {
-                        println exc
                         sh "kubectl create configmap ${ app_name } --from-literal=db_host=${ mysql_service_name } --from-literal=db_name=${ db_name }"
+                    }
+                }
+            }
+        }
+        stage("Create secrets for app.") 
+        { 
+            steps 
+            {
+                script 
+                {
+                    
+                    try
+                    {
+                        sh "kubectl get secret ${ app_name }"
+                    }
+                    catch(exc)
+                    {
                         sh "kubectl create secret generic ${ app_name } --from-literal=db_username=${ db_username } --from-literal=db_password=${ db_password }"
                     }
                 }
@@ -93,7 +108,7 @@ pipeline {
                 }
                 timeout(time: 5, unit: 'MINUTES')
                 {
-                    sh "until \$(curl -s -o /dev/null --head --fail http://${ dns_name }); do printf 'Wait for ${ dns_name }...'; sleep 20; done"
+                    sh "until \$(curl -s -o /dev/null --head --fail http://${ dns_name }); do printf 'Wait for ${ dns_name }...'; sleep 10; done"
                 }
             }
         }
