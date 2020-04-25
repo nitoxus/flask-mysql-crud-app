@@ -32,33 +32,28 @@ db = Database()
 metrics = PrometheusMetrics(app)
 metrics.info('app_info', 'Application info', version='1.0.3')
 
+by_path_counter = metrics.counter(
+    'by_path_counter', 'Request count by request paths',
+    labels={'path': lambda: request.path}
+)
 
 @app.route('/')
+@by_path_counter
 def index():
     data = db.read(None)
     
     return render_template('index.html', data=data)
 
-metrics.register_default(
-    metrics.counter(
-        'by_path_counter', 'Request count by request paths',
-        labels={'path': lambda: request.path}
-    )
-)
 
 @app.route('/add/')
+@by_path_counter
 def add():
     app.logger.info("Rendering add.html.")
     return render_template('add.html')
 
-metrics.register_default(
-    metrics.counter(
-        'by_path_counter', 'Request count by request paths',
-        labels={'path': lambda: request.path}
-    )
-)
 
 @app.route('/addphone', methods=['POST', 'GET'])
+@by_path_counter
 def addphone():
     if request.method == 'POST' and request.form['save']:
         if db.insert(request.form):
@@ -72,14 +67,9 @@ def addphone():
     else:
         return redirect(url_for('index'))
 
-metrics.register_default(
-    metrics.counter(
-        'by_path_counter', 'Request count by request paths',
-        labels={'path': lambda: request.path}
-    )
-)
 
 @app.route('/update/<int:id>/')
+@by_path_counter
 def update(id):
     data = db.read(id)
     app.logger.info("Update id: {}".format(id))
@@ -90,14 +80,9 @@ def update(id):
         session['update'] = id
         return render_template('update.html', data=data)
 
-metrics.register_default(
-    metrics.counter(
-        'by_path_counter', 'Request count by request paths',
-        labels={'path': lambda: request.path}
-    )
-)
 
 @app.route('/updatephone', methods=['POST'])
+@by_path_counter
 def updatephone():
     if request.method == 'POST' and request.form['update']:
 
@@ -114,14 +99,9 @@ def updatephone():
     else:
         return redirect(url_for('index'))
 
-metrics.register_default(
-    metrics.counter(
-        'by_path_counter', 'Request count by request paths',
-        labels={'path': lambda: request.path}
-    )
-)
 
 @app.route('/delete/<int:id>/')
+@by_path_counter
 def delete(id):
     data = db.read(id)
     app.logger.info("Delete id: {}".format(id))
@@ -132,14 +112,9 @@ def delete(id):
         session['delete'] = id
         return render_template('delete.html', data=data)
 
-metrics.register_default(
-    metrics.counter(
-        'by_path_counter', 'Request count by request paths',
-        labels={'path': lambda: request.path}
-    )
-)
 
 @app.route('/deletephone', methods=['POST'])
+@by_path_counter
 def deletephone():
     if request.method == 'POST' and request.form['delete']:
         
@@ -157,12 +132,6 @@ def deletephone():
     else:
         return redirect(url_for('index'))
 
-metrics.register_default(
-    metrics.counter(
-        'by_path_counter', 'Request count by request paths',
-        labels={'path': lambda: request.path}
-    )
-)
 
 @app.errorhandler(404)
 def page_not_found(error):
