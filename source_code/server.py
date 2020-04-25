@@ -32,12 +32,6 @@ db = Database()
 metrics = PrometheusMetrics(app)
 metrics.info('app_info', 'Application info', version='1.0.3')
 
-metrics.register_default(
-    metrics.counter(
-        'by_path_counter', 'Request count by request paths',
-        labels={'path': lambda: request.path}
-    )
-)
 
 @app.route('/')
 def index():
@@ -45,12 +39,24 @@ def index():
     
     return render_template('index.html', data=data)
 
+metrics.register_default(
+    metrics.counter(
+        'by_path_counter', 'Request count by request paths',
+        labels={'path': lambda: request.path}
+    )
+)
 
 @app.route('/add/')
 def add():
     app.logger.info("Rendering add.html.")
     return render_template('add.html')
 
+metrics.register_default(
+    metrics.counter(
+        'by_path_counter', 'Request count by request paths',
+        labels={'path': lambda: request.path}
+    )
+)
 
 @app.route('/addphone', methods=['POST', 'GET'])
 def addphone():
@@ -66,6 +72,12 @@ def addphone():
     else:
         return redirect(url_for('index'))
 
+metrics.register_default(
+    metrics.counter(
+        'by_path_counter', 'Request count by request paths',
+        labels={'path': lambda: request.path}
+    )
+)
 
 @app.route('/update/<int:id>/')
 def update(id):
@@ -78,6 +90,12 @@ def update(id):
         session['update'] = id
         return render_template('update.html', data=data)
 
+metrics.register_default(
+    metrics.counter(
+        'by_path_counter', 'Request count by request paths',
+        labels={'path': lambda: request.path}
+    )
+)
 
 @app.route('/updatephone', methods=['POST'])
 def updatephone():
@@ -96,6 +114,12 @@ def updatephone():
     else:
         return redirect(url_for('index'))
 
+metrics.register_default(
+    metrics.counter(
+        'by_path_counter', 'Request count by request paths',
+        labels={'path': lambda: request.path}
+    )
+)
 
 @app.route('/delete/<int:id>/')
 def delete(id):
@@ -108,6 +132,12 @@ def delete(id):
         session['delete'] = id
         return render_template('delete.html', data=data)
 
+metrics.register_default(
+    metrics.counter(
+        'by_path_counter', 'Request count by request paths',
+        labels={'path': lambda: request.path}
+    )
+)
 
 @app.route('/deletephone', methods=['POST'])
 def deletephone():
@@ -127,6 +157,12 @@ def deletephone():
     else:
         return redirect(url_for('index'))
 
+metrics.register_default(
+    metrics.counter(
+        'by_path_counter', 'Request count by request paths',
+        labels={'path': lambda: request.path}
+    )
+)
 
 @app.errorhandler(404)
 def page_not_found(error):
