@@ -66,8 +66,18 @@ pipeline {
             {
                 script 
                 {
-                    sh "kubectl create configmap ${ app_name } --from-literal=db_host=${ mysql_service_name } --from-literal=db_name=${ db_name} "
-                    sh "kubectl create secret generic ${ app_name } --from-literal=db_username=${ db_username } --from-literal=db_password=${ db_password }"
+                    
+                    try
+                    {
+                        sh "kubectl delete configmap ${ app_name }"
+                        sh "kubectl delete secret ${ app_name }"
+                    }
+                    catch(exc)
+                    {
+                        println exc
+                        sh "kubectl create configmap ${ app_name } --from-literal=db_host=${ mysql_service_name } --from-literal=db_name=${ db_name }"
+                        sh "kubectl create secret generic ${ app_name } --from-literal=db_username=${ db_username } --from-literal=db_password=${ db_password }"
+                    }
                 }
             }
         }
