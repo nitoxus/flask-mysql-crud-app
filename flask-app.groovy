@@ -11,6 +11,9 @@ def db_name = "crud_flask"
 def with_run_params = ""
 def deployment = "deploy-flask-crud-app.yml"
 def dns_name = ""
+def s3_bucket = "su-opsschool-project"
+def jmeter_test_plan = "project-test-plan.jmx"
+
 pipeline {
     agent any 
     stages 
@@ -109,6 +112,19 @@ pipeline {
                 timeout(time: 5, unit: 'MINUTES')
                 {
                     sh "until \$(curl -s -o /dev/null --head --fail http://${ dns_name }); do printf 'Wait for ${ dns_name }...'; sleep 10; done"
+                }
+            }
+        }
+        stage("Make Load Test")
+        {
+            steps
+            {
+                script
+                {
+                    sh "cp ${jmeter_test_plan} ~/${jmeter_test_plan}"
+                    sh "sed -i 's/%url%/${ dns_name }/g' ~/${jmeter_test_plan}"
+                    sh "/opt/jmeter/bin/jmeter -n -t ~/${jmeter_test_plan} -l s3://${s3_bucket}/load-test-result.csv"
+
                 }
             }
         }
