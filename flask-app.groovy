@@ -122,9 +122,9 @@ pipeline {
                 script
                 {
                     sh "cp ${jmeter_test_plan} ~/${jmeter_test_plan}"
-                    sh "sed -i 's/%url%/${ dns_name }/g' ~/${jmeter_test_plan}"
-                    sh "/opt/jmeter/bin/jmeter -n -t ~/${jmeter_test_plan} -l s3://${s3_bucket}/load-test-result.csv"
-
+                    sh "sed -i 's/%url%/${ dns_name }/g' ~/${ jmeter_test_plan }"
+                    sh "/opt/jmeter/bin/jmeter -n -t ~/${ jmeter_test_plan } -l ~/load-test-result.csv"
+                    sh "aws s3 cp ~/load-test-result.csv s3://${ s3_bucket }"
                 }
             }
         }
